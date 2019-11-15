@@ -49,7 +49,7 @@ namespace TechJobsConsole
             {
                 string aValue = row[column];
 
-                if (aValue.Contains(value))
+                if (0 <= aValue.IndexOf(value, System.StringComparison.CurrentCultureIgnoreCase))
                 {
                     jobs.Add(row);
                 }
@@ -58,6 +58,29 @@ namespace TechJobsConsole
             return jobs;
         }
 
+        public static List<Dictionary<string, string>> FindByValue(string value)
+        {
+            LoadData();
+
+            List<Dictionary<string, string>> jobs = new List<Dictionary<string, string>>();
+
+            foreach (Dictionary<string, string> row in AllJobs)
+            {
+                bool inList = false;
+                foreach (KeyValuePair<string, string> col in row)
+                {
+                    // checks if this row is added and if the search term is present
+                    if ((inList == false) && (0 <= (col.Value.IndexOf(value, System.StringComparison.CurrentCultureIgnoreCase))))
+                    {
+                        jobs.Add(row);
+                        inList = true;
+                    }
+
+                }
+            }
+
+            return jobs;
+        }
         /*
          * Load and parse data from job_data.csv
          */
